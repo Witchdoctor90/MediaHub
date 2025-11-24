@@ -1,10 +1,26 @@
 namespace MediaHub.Entities;
 
-public class Reaction(ReactionType type, Guid photoId, Guid userId)
+public class Reaction
 {
-    public Guid Id { get; } = Guid.NewGuid();
-    public readonly Guid UserId = userId;
-    public readonly Guid PhotoId = photoId;
-    public readonly DateTime CreatedAt = DateTime.UtcNow;
-    public readonly ReactionType ReactionType = type;
+    public Guid Id { get; set; } = Guid.NewGuid();
+
+    public ReactionType ReactionType { get; set; }
+
+    public Guid PhotoId { get; set; }
+
+    public Guid UserId { get; set; }
+
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+    public Reaction()
+    {
+    }
+
+    public Reaction(ReactionType reactionType, Guid photoId, Guid userId)
+    {
+        ReactionType = reactionType;
+        PhotoId = photoId;
+        UserId = userId;
+        CreatedAt = DateTime.UtcNow;
+    }
 }
