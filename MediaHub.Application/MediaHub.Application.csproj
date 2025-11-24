@@ -10,4 +10,8 @@
       <ProjectReference Include="..\MediaHub.Domain\MediaHub.Domain.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="MediatR" Version="14.0.0-beta-1" />
+    </ItemGroup>
+
 </Project>
