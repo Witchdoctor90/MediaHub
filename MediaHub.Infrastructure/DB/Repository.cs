@@ -46,6 +46,12 @@ public class Repository<T> : IRepository<T> where T : class, IBaseEntity
         return existingEntity;
     }
 
+    public Task UpdateRangeAsync(IEnumerable<T> entities)
+    {
+        _context.UpdateRange(entities);
+        return Task.CompletedTask;
+    }
+
     public async Task<Guid> DeleteAsync(Guid entityId)
     {
         var entity = await _entities.FindAsync(entityId);

@@ -20,10 +20,8 @@ public class AlbumsController(ILogger<AlbumsController> logger, IMediator mediat
     {
         logger.LogTrace("Incoming GetById Request \n Id: {id}", id);
 
-        var queryable = await mediator.Send(new GetAlbumsAsQueryableQuery());
-        var result = await queryable
-            .Include(a => a.Photos)
-            .FirstAsync(a => a.Id == id);
+        var query = new GetAlbumByIdQuery(id);
+        var result = await mediator.Send(query);
         return Ok(result);
     }
 
@@ -99,10 +97,21 @@ public class AlbumsController(ILogger<AlbumsController> logger, IMediator mediat
         var entity = await mediator.Send(new GetAlbumByIdQuery(id));
         if (entity.UserId != userGuid && !User.IsInRole("Admin")) return new UnauthorizedResult();
 
-        var tasks = photoIds.Select(photoId => mediator.Send(new GetPhotoByIdQuery(photoId)));
-        var photosList = (await Task.WhenAll(tasks)).ToList();
+        var command = new AddPhotosToAlbumCommand(photoIds, id);
+        var result = await mediator.Send(command);
+        return Ok(result);
+    }
 
-        var command = new AddPhotosToAlbumCommand(photosList, id);
+    [Authorize]
+    [HttpPut]
+    [Route("{id:guid}")]
+    public async Task<IActionResult> RemovePhotos([FromBody] IEnumerable<Guid> photoIds, Guid id)
+    {
+        if (!Guid.TryParse(User.FindFirstValue("Id"), out var userGuid)) return Unauthorized();
+        var entity = await mediator.Send(new GetAlbumByIdQuery(id));
+        if (entity.UserId != userGuid && !User.IsInRole("Admin")) return new UnauthorizedResult();
+
+        var command = new RemovePhotosFromAlbumCommand(photoIds, id);
         var result = await mediator.Send(command);
         return Ok(result);
     }

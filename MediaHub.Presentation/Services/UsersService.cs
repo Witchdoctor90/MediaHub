@@ -32,5 +32,10 @@ public class UsersService : IUsersService
 
         return _tokenService.GenerateToken(user);
     }
-    
+
+    public async Task<string?> GetUsername(Guid id)
+    {
+        var user = await _userManager.FindByIdAsync(id.ToString());
+        return user is not null ? user.UserName : throw new KeyNotFoundException($"User not found - {id}");
+    }
 }

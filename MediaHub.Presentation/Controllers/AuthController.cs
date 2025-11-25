@@ -20,6 +20,14 @@ public class AuthController : Controller
             _usersService = usersService;
         }
 
+        [HttpGet]
+        [Route("{id:guid}")]
+        public async Task<IActionResult> GetUsername(Guid id)
+        {
+            var result = await _usersService.GetUsername(id);
+            return Ok(result);
+        }
+
         [HttpPost]
         public async Task<IActionResult> Register([FromBody] RegisterDto dto)
         {
@@ -51,16 +59,5 @@ public class AuthController : Controller
                 return BadRequest("Failed to login");
             }
         }
-
-
-        //remove this
-        [HttpGet]
-        [Authorize]
-        public async Task<IActionResult> GetUserInfo()
-        {
-            var email = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
-            var username = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.GivenName)?.Value;
-
-            return Ok(new { username = username, email = email });
-        }
+    
 }

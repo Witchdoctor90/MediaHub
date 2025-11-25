@@ -55,6 +55,8 @@ public static class DependencyInjection
         });
         services.AddSingleton<IPhotoManager, AzureBlobPhotoService>();
         services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+        services.AddScoped<IPhotoRepository, PhotoRepository>();
+        services.AddScoped<IAlbumRepository, AlbumRepository>();
         
         return services;
     }

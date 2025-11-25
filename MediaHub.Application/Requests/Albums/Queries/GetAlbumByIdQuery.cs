@@ -9,11 +9,11 @@ public class GetAlbumByIdQuery(Guid id) : IRequest<Album>
     public Guid Id { get; set; } = id;
 }
 
-public class GetAlbumByIdQueryHandler(IRepository<Album> repository) : IRequestHandler<GetAlbumByIdQuery, Album>
+public class GetAlbumByIdQueryHandler(IAlbumRepository repository) : IRequestHandler<GetAlbumByIdQuery, Album>
 {
     public async Task<Album> Handle(GetAlbumByIdQuery request, CancellationToken cancellationToken)
     {
-        var entity = await repository.GetByIdAsync(request.Id);
+        var entity = await repository.GetAlbumWithPhotos(request.Id);
         return entity ?? throw new KeyNotFoundException($"Album not found - {request.Id}");
     }
 }

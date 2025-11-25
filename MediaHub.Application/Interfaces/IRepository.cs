@@ -9,6 +9,7 @@ public interface IRepository<T> where T : class, IBaseEntity
     public Task<IEnumerable<T>> GetPagedAsync(int pageNumber, int pageSize);
     public Task<T?> AddAsync(T entity);
     public Task<T> UpdateAsync(T entity);
+    public Task UpdateRangeAsync(IEnumerable<T> entities);
     public Task<Guid> DeleteAsync(Guid entityId);
     public Task<bool> ExistsAsync(Guid id);
     Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate);
