@@ -9,7 +9,6 @@ using Microsoft.Extensions.Logging.AzureAppServices;
 var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddEnvironmentVariables();
 
-
 builder.Services.AddLogging(lbuilder =>
 {
     lbuilder.SetMinimumLevel(LogLevel.Trace);
@@ -22,6 +21,23 @@ builder.Services.Configure<AzureFileLoggerOptions>(options =>
     options.FileName = "log-";
     options.FileSizeLimit = 50 * 1024;
     options.RetainedFileCountLimit = 5;
+});
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy.AllowAnyOrigin()
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+    options.AddPolicy("AllowFrontend", policy =>
+    {
+        policy.WithOrigins(builder.Configuration["FrontendUrl"])
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials();
+    });
 });
 
 builder.Services.AddInfrastructureDependencies(builder.Configuration);
@@ -41,28 +57,11 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-    builder.Services.AddCors(options =>
-    {
-        options.AddPolicy("AllowAll", policy =>
-        {
-            policy.AllowAnyOrigin()
-                .AllowAnyHeader()
-                .AllowAnyMethod();
-        });
-    });
+    app.UseCors("AllowAll");
 }
 else
 {
-    builder.Services.AddCors(options =>
-    {
-        options.AddPolicy("AllowFrontend", policy =>
-        {
-            policy.WithOrigins(builder.Configuration["FrontendUrl"])
-                .AllowAnyHeader()
-                .AllowAnyMethod()
-                .AllowCredentials();
-        });
-    });
+    app.UseCors("AllowFrontend");
 }
 
 using (var scope = app.Services.CreateScope())
