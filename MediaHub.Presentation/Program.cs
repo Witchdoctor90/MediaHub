@@ -8,18 +8,20 @@ using Microsoft.Extensions.Logging.AzureAppServices;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddEnvironmentVariables();
+
+
+builder.Services.AddLogging(lbuilder =>
+{
+    lbuilder.SetMinimumLevel(LogLevel.Trace);
+    lbuilder.AddConsole();
+});
+
 builder.Logging.AddAzureWebAppDiagnostics();
 builder.Services.Configure<AzureFileLoggerOptions>(options =>
 {
     options.FileName = "log-";
     options.FileSizeLimit = 50 * 1024;
     options.RetainedFileCountLimit = 5;
-});
-
-builder.Services.AddLogging(lbuilder =>
-{
-    lbuilder.SetMinimumLevel(LogLevel.Trace);
-    lbuilder.AddConsole();
 });
 
 builder.Services.AddInfrastructureDependencies(builder.Configuration);
