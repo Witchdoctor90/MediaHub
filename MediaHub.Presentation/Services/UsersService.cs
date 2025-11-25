@@ -38,4 +38,5 @@ public class UsersService : IUsersService
         var user = await _userManager.FindByIdAsync(id.ToString());
         return user is not null ? user.UserName : throw new KeyNotFoundException($"User not found - {id}");
     }
+
 }

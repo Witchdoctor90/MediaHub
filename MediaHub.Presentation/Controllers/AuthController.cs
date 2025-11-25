@@ -24,7 +24,18 @@ public class AuthController : Controller
         [Route("{id:guid}")]
         public async Task<IActionResult> GetUsername(Guid id)
         {
-            var result = await _usersService.GetUsername(id);
+            return Ok(User.FindFirst(ClaimTypes.GivenName)?.Value);
+        }
+        
+        [HttpGet]
+        public async Task<IActionResult> GetUserInfo()
+        {
+            var result = new
+            {
+                email = User.FindFirst(ClaimTypes.Email)?.Value,
+                username = User.FindFirst(ClaimTypes.GivenName)?.Value,
+                id = User.FindFirst(ClaimTypes.NameIdentifier)?.Value
+            };
             return Ok(result);
         }
 
@@ -60,4 +71,5 @@ public class AuthController : Controller
             }
         }
     
+        
 }
