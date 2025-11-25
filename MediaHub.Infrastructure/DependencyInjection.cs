@@ -48,13 +48,14 @@ public static class DependencyInjection
         })
             .Services.AddAuthorization();
         
-        services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
         
         services.AddAzureClients(azureBuilder =>
         {
             azureBuilder.AddBlobServiceClient(configuration.GetConnectionString("AzureStorageConnection"));
         });
         services.AddSingleton<IPhotoManager, AzureBlobPhotoService>();
+        services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+        
         return services;
     }
 }
