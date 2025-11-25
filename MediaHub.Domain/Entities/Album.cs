@@ -1,6 +1,6 @@
 namespace MediaHub.Entities;
 
-public class Album
+public class Album : IBaseEntity
 {
     public Guid Id { get; set; } = Guid.NewGuid();  
     public string Title { get; set; }

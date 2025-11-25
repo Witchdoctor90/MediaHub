@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace MediaHub.Infrastructure.DB;
 
-public class Repository<T> : IRepository<T> where T : class
+public class Repository<T> : IRepository<T> where T : class, IBaseEntity
 {
     private readonly PostgresqlDbContext _context;
     private readonly DbSet<T> _entities;
@@ -41,8 +41,8 @@ public class Repository<T> : IRepository<T> where T : class
 
     public async Task<T> UpdateAsync(T entity)
     {
-        var existingEntity = await _entities.FindAsync(entity);
-        _context.Entry(existingEntity).CurrentValues.SetValues(entity);
+        var existingEntity = await _entities.FindAsync(entity.Id);
+        _context.Entry<T>(existingEntity).CurrentValues.SetValues(entity);
         return existingEntity;
     }
 
@@ -79,4 +79,10 @@ public class Repository<T> : IRepository<T> where T : class
     {
         await _context.SaveChangesAsync(cancellationToken);
     }
+
+    public IQueryable<T> Query()
+    {
+        return _entities.AsQueryable();
+    }
+
 }

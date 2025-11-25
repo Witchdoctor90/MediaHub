@@ -5,9 +5,9 @@ using MediatR;
 
 namespace MediaHub.Application.Requests.Photos.Commands;
 
-public class AddPhotoCommand(string filename, string contentType, Stream content, string description, Guid userId) : IRequest<Photo>
+public class AddPhotoCommand(FileBlob file, string description, Guid userId) : IRequest<Photo>
 {
-    public FileBlob File { get; set; }
+    public FileBlob File { get; set; } = file;
     public string Description { get; set; } = description;
     public Guid UserId { get; set; } = userId;
 }

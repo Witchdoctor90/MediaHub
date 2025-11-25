@@ -1,10 +1,24 @@
+using MediaHub.Application;
 using MediaHub.Infrastructure;
 using MediaHub.Infrastructure.DB;
+using MediaHub.Presentation.Interfaces;
+using MediaHub.Presentation.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddLogging(lbuilder =>
+{
+    lbuilder.SetMinimumLevel(LogLevel.Trace);
+    lbuilder.AddConsole();
+});
+
 builder.Services.AddInfrastructureDependencies(builder.Configuration);
+builder.Services.AddApplicationDependencies();
+builder.Services.AddControllers();
+
+builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<IUsersService, UsersService>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -20,14 +34,15 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
-
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<PostgresqlDbContext>();
     db.Database.Migrate();
 }
 
+app.UseAuthentication();
+app.UseAuthorization();
 
+app.MapControllers();
 app.Run();
 

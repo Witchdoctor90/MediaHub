@@ -1,6 +1,6 @@
 namespace MediaHub.Entities;
 
-public class Photo
+public class Photo : IBaseEntity
 {
     public Guid Id { get; set; } = Guid.NewGuid();
 

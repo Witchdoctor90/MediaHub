@@ -1,6 +1,6 @@
 namespace MediaHub.Entities;
 
-public class Reaction
+public class Reaction : IBaseEntity
 {
     public Guid Id { get; set; } = Guid.NewGuid();
 

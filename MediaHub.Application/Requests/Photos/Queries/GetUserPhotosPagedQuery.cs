@@ -11,10 +11,10 @@ public class GetUserPhotosPagedQuery(int pageNum, int count, Guid userId) : IReq
     public Guid UserId { get; set; } = userId;
 }
 
-public class GetUserPhotosPagedQueryHandler(IRepository<Photo> _repository) : IRequestHandler<GetAllPhotosPagedQuery, IEnumerable<Photo>>
+public class GetUserPhotosPagedQueryHandler(IRepository<Photo> _repository) : IRequestHandler<GetUserPhotosPagedQuery, IEnumerable<Photo>>
 {
-    public async Task<IEnumerable<Photo>> Handle(GetAllPhotosPagedQuery request, CancellationToken cancellationToken)
+    public async Task<IEnumerable<Photo>> Handle(GetUserPhotosPagedQuery request, CancellationToken cancellationToken)
     {
-        return await _repository.GetPagedAsync(request.PageNumber, request.Count);
+        return await _repository.FindAsyncPaged(p => p.UserId == request.UserId, request.PageNum, request.Count);
     }
 }

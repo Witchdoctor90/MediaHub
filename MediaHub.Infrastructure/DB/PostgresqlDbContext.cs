@@ -1,9 +1,11 @@
 using MediaHub.Entities;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace MediaHub.Infrastructure.DB;
 
-public class PostgresqlDbContext : DbContext
+public class PostgresqlDbContext : IdentityDbContext<IdentityUser>
 {
     public PostgresqlDbContext(DbContextOptions<PostgresqlDbContext> options) : base(options)
     {

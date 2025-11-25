@@ -5,9 +5,8 @@ using MediatR;
 
 namespace MediaHub.Application.Requests.Albums.Queries;
 
-public class FindAlbumQuery(Guid userId, Expression<Func<Album, bool>> predicate) : IRequest<IEnumerable<Album>>
+public class FindAlbumQuery(Expression<Func<Album, bool>> predicate) : IRequest<IEnumerable<Album>>
 {
-    public Guid UserId { get; set; } = userId;
     public Expression<Func<Album, bool>> predicate = predicate;
 }
 
