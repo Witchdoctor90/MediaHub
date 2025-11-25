@@ -4,8 +4,16 @@ using MediaHub.Infrastructure.DB;
 using MediaHub.Presentation.Interfaces;
 using MediaHub.Presentation.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging.AzureAppServices;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Logging.AddAzureWebAppDiagnostics();
+builder.Services.Configure<AzureFileLoggerOptions>(options =>
+{
+    options.FileName = "log-";
+    options.FileSizeLimit = 50 * 1024;
+    options.RetainedFileCountLimit = 5;
+});
 
 builder.Services.AddLogging(lbuilder =>
 {

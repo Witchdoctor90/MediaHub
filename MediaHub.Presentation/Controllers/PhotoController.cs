@@ -61,7 +61,7 @@ public class PhotoController(ILogger<PhotoController> logger, IMediator mediator
         var result = await mediator.Send(query);
         return Ok(result);
     }
-    
+        
     [HttpPost]
     [Authorize]
     [ApiExplorerSettings(IgnoreApi = true)]
