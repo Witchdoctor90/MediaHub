@@ -1,0 +1,46 @@
+.App {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #f8f9fa;
+}
+
+.main-content {
+  flex: 1;
+  padding: 2rem;
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  background: #f8f9fa;
+}
+
+.page {
+  animation: fadeIn 0.3s ease-in;
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.page h1 {
+  color: #2c3e50;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.page p {
+  color: #6c757d;
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
