@@ -34,39 +34,16 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  const getUserIdFromToken = (token: string): string | null => {
-    try {
-      const payload = JSON.parse(atob(token.split('.')[1]));
-      return payload.sub || payload.nameid || payload.userId || payload['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'];
-    } catch (error) {
-      console.error('Failed to decode token:', error);
-      return null;
-    }
-  };
-
-  const loadUserInfo = async (userId: string) => {
-    try {
-      const username = await authApi.getUsername(userId);
-      setUser({
-        id: userId,
-        username: username,
-        email: '' // Email не потрібен для відображення
-      });
-    } catch (error) {
-      console.error('Failed to get username:', error);
-      authApi.logout();
-    }
-  };
-
   useEffect(() => {
     // Перевірка наявності токену при завантаженні
     const initAuth = async () => {
       const token = getToken();
       if (token) {
-        const userId = getUserIdFromToken(token);
-        if (userId) {
-          await loadUserInfo(userId);
-        } else {
+        try {
+          const userInfo = await authApi.getUserInfo();
+          setUser(userInfo);
+        } catch (error) {
+          console.error('Failed to get user info:', error);
           authApi.logout();
         }
       }
@@ -80,12 +57,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     try {
       const token = await authApi.login(username, password);
       if (token) {
-        const userId = getUserIdFromToken(token);
-        if (userId) {
-          await loadUserInfo(userId);
-        } else {
-          throw new Error('Failed to decode token');
-        }
+        const userInfo = await authApi.getUserInfo();
+        setUser(userInfo);
       } else {
         throw new Error('Login failed');
       }
@@ -99,12 +72,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     try {
       const token = await authApi.register(username, email, password);
       if (token) {
-        const userId = getUserIdFromToken(token);
-        if (userId) {
-          await loadUserInfo(userId);
-        } else {
-          throw new Error('Failed to decode token');
-        }
+        const userInfo = await authApi.getUserInfo();
+        setUser(userInfo);
       } else {
         throw new Error('Registration failed');
       }

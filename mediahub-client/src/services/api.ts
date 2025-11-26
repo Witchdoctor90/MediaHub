@@ -78,6 +78,11 @@ export const authApi = {
     return response.text(); // Повертає username як plain text
   },
 
+  getUserInfo: async () => {
+    const response = await apiRequest('/Auth/GetUserInfo');
+    return response.json();
+  },
+
   logout: () => {
     removeToken();
   },
