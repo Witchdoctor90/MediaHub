@@ -57,6 +57,6 @@
 /* Responsive */
 @media (max-width: 768px) {
   .photo-feed {
-    padding: 0;
+    padding: 0 1rem;
   }
 }
