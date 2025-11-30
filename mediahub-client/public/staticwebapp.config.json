@@ -3,10 +3,4 @@
     "rewrite": "/index.html",
     "exclude": ["/images/*.{png,jpg,gif,ico}", "/*.{css,scss,js}"]
   }
-}json
-{
-  "navigationFallback": {
-    "rewrite": "/index.html",
-    "exclude": ["/images/*.{png,jpg,gif,ico}", "/*.{css,scss,js}"]
-  }
 }
